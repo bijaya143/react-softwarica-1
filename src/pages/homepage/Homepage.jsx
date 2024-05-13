@@ -1,11 +1,24 @@
-import React from "react"
+import React, { useEffect } from "react";
+import { testApi } from "../../apis/Api";
 
 const Homepage = () => {
-    return (
-        <div>
-           <h1>Homepage</h1> 
-        </div>
-    )
-}
+  useEffect(() => {
+    // console.log("Hello");
 
-export default Homepage
+    testApi()
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        return error;
+      });
+  });
+
+  return (
+    <div>
+      <h1>Homepage</h1>
+    </div>
+  );
+};
+
+export default Homepage;
