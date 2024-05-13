@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { registerUserApi } from "../../../apis/Api";
+import { toast } from "react-toastify";
 
 const Register = () => {
   // States
@@ -66,13 +68,33 @@ const Register = () => {
     if (!isValid) {
       return;
     }
+
+    // Making
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    };
+    registerUserApi(data)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data?.success) {
+          toast.error(res.data?.message);
+        } else {
+          toast.success(res.data?.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
     <>
       <div>
         <h1 className="m-3">Create an account</h1>
-        <form className="w-25 m-3" action="" method="post">
+        <form className="w-25 m-3">
           <label htmlFor="">First Name</label>
           <input
             type="text"
