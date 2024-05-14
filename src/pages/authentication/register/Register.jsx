@@ -79,7 +79,7 @@ const Register = () => {
     registerUserApi(data)
       .then((res) => {
         console.log(res.data);
-        if (res.data?.success) {
+        if (res.data?.success === false) {
           toast.error(res.data?.message);
         } else {
           toast.success(res.data?.message);
