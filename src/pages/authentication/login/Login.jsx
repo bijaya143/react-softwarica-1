@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { loginUserApi } from "../../../apis/Api";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   // States
@@ -46,6 +47,16 @@ const Login = () => {
           toast.error(res.data?.message);
         } else {
           toast.success(res.data?.message);
+
+          localStorage.setItem("token", res.data?.data); // Set Token
+
+          // Decode Token and Convert JSON
+          const user = jwtDecode(res.data.data);
+          const stringifiedData = JSON.stringify(user);
+
+          localStorage.setItem("user", stringifiedData); // Set User
+
+          window.location.reload(); // Page Reload
         }
       })
       .catch((err) => {

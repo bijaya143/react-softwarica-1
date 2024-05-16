@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -35,20 +37,54 @@ const Navbar = () => {
               </li>
             </ul>
             <form class="d-flex" role="search">
-              <Link
-                to={"/login"}
-                className="btn btn-outline-success m-1"
-                type="submit"
-              >
-                Login
-              </Link>
-              <Link
-                to={"/register"}
-                className="btn btn-outline-danger m-1"
-                type="submit"
-              >
-                Register
-              </Link>
+              {!user ? (
+                <>
+                  <Link
+                    to={"/login"}
+                    className="btn btn-outline-success m-1"
+                    type="submit"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to={"/register"}
+                    className="btn btn-outline-danger m-1"
+                    type="submit"
+                  >
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-secondary dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Welcome {user.firstName}
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          Profile
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          Settings
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          Logout
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </>
+              )}
             </form>
           </div>
         </div>
