@@ -6,7 +6,8 @@ const AdminDashboard = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   // Error States
   const [titleError, setTitleError] = useState("");
@@ -27,6 +28,12 @@ const AdminDashboard = () => {
       isValid = false;
     }
     return isValid;
+  };
+
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    setPreviewImage(URL.createObjectURL(file));
   };
 
   // Submit
@@ -103,6 +110,11 @@ const AdminDashboard = () => {
                       id=""
                     />
                     <br />
+                    {descriptionError && (
+                      <small className="text text-danger">
+                        {descriptionError}
+                      </small>
+                    )}
                     <label htmlFor="" className="mt-2">
                       Price
                     </label>
@@ -114,6 +126,9 @@ const AdminDashboard = () => {
                       name=""
                       id=""
                     />
+                    {priceError && (
+                      <small className="text text-danger">{priceError}</small>
+                    )}
                     <br />
                     <label htmlFor="" className="mt-2">
                       Category
@@ -127,17 +142,36 @@ const AdminDashboard = () => {
                       <option value="poisonous">Poisonous</option>
                       <option value="edible">Edible</option>
                     </select>
+                    {categoryError && (
+                      <small className="text text-danger">
+                        {categoryError}
+                      </small>
+                    )}
                     <br />
                     <label htmlFor="" className="mt-2">
                       Image
                     </label>
                     <input
-                      onChange={(e) => setImage(e.target.value)}
+                      onChange={handleImage}
                       type="file"
                       className="form-control"
                       name=""
                       id=""
                     />
+                    {imageError && (
+                      <small className="text text-danger">{imageError}</small>
+                    )}
+                    {/** Preview Image */}
+                    {previewImage && (
+                      <img
+                        height={"200px"}
+                        width={"400px"}
+                        src={previewImage}
+                        alt="preview-image"
+                        srcset=""
+                        className="img-fluid rounded object-fit-cover mt-3"
+                      />
+                    )}
                   </form>
                 </div>
                 <div class="modal-footer">
