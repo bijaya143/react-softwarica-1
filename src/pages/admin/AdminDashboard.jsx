@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { createProductApi } from "../../apis/Api";
+import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
   // States
@@ -27,6 +29,18 @@ const AdminDashboard = () => {
       setDescriptionError("Please enter description.");
       isValid = false;
     }
+    if (price.trim() === "") {
+      setPriceError("Please enter price.");
+      isValid = false;
+    }
+    if (category.trim() === "") {
+      setCategoryError("Please select category.");
+      isValid = false;
+    }
+    if (!image) {
+      setImageError("Please select image.");
+      isValid = false;
+    }
     return isValid;
   };
 
@@ -39,11 +53,38 @@ const AdminDashboard = () => {
   // Submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(firstName, lastName);
+    // console.log(title, description, price, category, image);
     var isValid = validate();
     if (!isValid) {
       return;
     }
+
+    const formData = new FormData();
+    formData.append("image", image);
+    // Making
+    const data = {
+      title: title,
+      description: description,
+      price: price,
+      category: category,
+    };
+    Object.entries(data).map(([key, value]) => {
+      formData.append(`${key}`, value);
+    });
+    createProductApi(formData)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data?.success === false) {
+          toast.error(res.data?.message);
+        } else {
+          toast.success(res.data?.message);
+          setTimeout(() => window.location.reload(), 1000);
+          // Page Reload
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
@@ -109,12 +150,12 @@ const AdminDashboard = () => {
                       name=""
                       id=""
                     />
-                    <br />
                     {descriptionError && (
                       <small className="text text-danger">
                         {descriptionError}
                       </small>
                     )}
+                    <br />
                     <label htmlFor="" className="mt-2">
                       Price
                     </label>
@@ -139,6 +180,7 @@ const AdminDashboard = () => {
                       name=""
                       id=""
                     >
+                      <option value="">Select Category</option>
                       <option value="poisonous">Poisonous</option>
                       <option value="edible">Edible</option>
                     </select>
