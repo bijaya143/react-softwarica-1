@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-import { createProductApi } from "../../apis/Api";
+import React, { useEffect, useState } from "react";
+import {
+  createProductApi,
+  deleteProductApi,
+  getProductsApi,
+} from "../../apis/Api";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   // States
@@ -10,6 +15,18 @@ const AdminDashboard = () => {
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    getProductsApi()
+      .then((res) => {
+        setProducts(res.data.data);
+      })
+      .catch((err) => {
+        toast.error("Server Error");
+      });
+  }, []);
 
   // Error States
   const [titleError, setTitleError] = useState("");
@@ -78,8 +95,23 @@ const AdminDashboard = () => {
           toast.error(res.data?.message);
         } else {
           toast.success(res.data?.message);
-          setTimeout(() => window.location.reload(), 1000);
+          // setTimeout(() => window.location.reload(), 1000);
           // Page Reload
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const handleDelete = (id) => {
+    deleteProductApi(id)
+      .then((res) => {
+        console.log("===", res);
+        if (res.data?.success === false) {
+          toast.error(res.data?.message);
+        } else {
+          toast.success(res.data?.message);
         }
       })
       .catch((err) => {
@@ -248,7 +280,41 @@ const AdminDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
+            {products.map((singleProduct) => (
+              <tr>
+                <td>
+                  <img
+                    height={"40px"}
+                    width={"40px"}
+                    src={`http://localhost:3001/${singleProduct.image}`}
+                    alt=""
+                  />
+                </td>
+                <td>{singleProduct.title}</td>
+                <td>NPR.{singleProduct.price}</td>
+                <td>{singleProduct.category}</td>
+                <td>{singleProduct.description}</td>
+                <td>
+                  <div className="btn-group" role="group">
+                    <Link
+                      to={`/admin/product/${singleProduct._id}`}
+                      className="btn btn-success"
+                    >
+                      Edit
+                    </Link>
+                    {/* <button className="btn btn-danger">Delete</button> */}
+                    <Link
+                      className="btn btn-danger"
+                      to={handleDelete(singleProduct.id)}
+                    >
+                      Delete
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            ))}
+
+            {/* <tr>
               <td>
                 <img
                   height={"40px"}
@@ -272,7 +338,7 @@ const AdminDashboard = () => {
                   </button>
                 </div>
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>

@@ -11,10 +11,17 @@ const Api = axios.create({
 export const testApi = () => Api.get('/test')
 export const testNewApi = () => Api.get('/test-new')
 
+// Authentication
 export const registerUserApi = (data) => Api.post('/api/user/create-user', data)
 export const loginUserApi = (data) => Api.post('/api/user/login', data)
+
+
+// Products
 export const createProductApi = (data) => Api.post('/api/product/create', data, {
     headers:{
         'Content-Type':'multipart/form-data'
     }
 })
+export const getProductsApi = () => Api.get('/api/product')
+export const getProductApi = (id) => Api.get(`/api/product/${id}`)
+export const deleteProductApi = (id) => Api.delete(`/api/product/${id}`)
