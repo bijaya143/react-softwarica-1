@@ -105,18 +105,24 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = (id) => {
-    deleteProductApi(id)
-      .then((res) => {
-        console.log("===", res);
-        if (res.data?.success === false) {
-          toast.error(res.data?.message);
-        } else {
-          toast.success(res.data?.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    const confirmDialog = window.confirm("Do you want to delete?");
+    if (confirmDialog) {
+      deleteProductApi(id)
+        .then((res) => {
+          if (res.data?.success === false) {
+            toast.error(res.data?.message);
+          } else {
+            toast.success(res.data?.message);
+          }
+          window.location.reload();
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            toast.error(err.response.data.message);
+          }
+          toast.error("Server not responding.");
+        });
+    }
   };
 
   return (
@@ -291,7 +297,7 @@ const AdminDashboard = () => {
                   />
                 </td>
                 <td>{singleProduct.title}</td>
-                <td>NPR.{singleProduct.price}</td>
+                <td>NPR {singleProduct.price}</td>
                 <td>{singleProduct.category}</td>
                 <td>{singleProduct.description}</td>
                 <td>
@@ -302,13 +308,12 @@ const AdminDashboard = () => {
                     >
                       Edit
                     </Link>
-                    {/* <button className="btn btn-danger">Delete</button> */}
-                    <Link
+                    <button
                       className="btn btn-danger"
-                      to={handleDelete(singleProduct.id)}
+                      onClick={() => handleDelete(singleProduct._id)}
                     >
                       Delete
-                    </Link>
+                    </button>
                   </div>
                 </td>
               </tr>

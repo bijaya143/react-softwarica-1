@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProductApi } from "../../apis/Api";
+import { getProductApi, updateProductApi } from "../../apis/Api";
 import { toast } from "react-toastify";
 
 const AdminUpdate = () => {
@@ -40,6 +40,37 @@ const AdminUpdate = () => {
         toast.error(err.response.message);
       });
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("image", productNewImage);
+    // Making
+    const data = {
+      title: productName,
+      description: productDescription,
+      price: productPrice,
+      category: productCategory,
+    };
+    Object.entries(data).map(([key, value]) => {
+      formData.append(`${key}`, value);
+    });
+    updateProductApi(id, formData)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data?.success === false) {
+          toast.error(res.data?.message);
+        } else {
+          toast.success(res.data?.message);
+          // setTimeout(() => window.location.reload(), 1000);
+          // Page Reload
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   return (
     <>
@@ -96,7 +127,10 @@ const AdminUpdate = () => {
               className="form-control"
             />
 
-            <button className="btn btn-danger w-100 mt-2">
+            <button
+              className="btn btn-danger w-100 mt-2"
+              onClick={handleSubmit}
+            >
               Update Product
             </button>
           </form>
@@ -117,7 +151,7 @@ const AdminUpdate = () => {
                   height={300}
                   width={300}
                   className="img-fluid object-fix-cover rounded-4"
-                  src="https://th.bing.com/th/id/R.b16638e30110829994f90f11f3bcbe2d?rik=esurmGY%2b%2b2frrQ&riu=http%3a%2f%2fweneedfun.com%2fwp-content%2fuploads%2f2016%2f01%2fFlower-Pictures-112.jpg&ehk=CZgUEWCwYR64gOxpwuuPpP3x3euj7Cj2jDks%2foHVkLQ%3d&risl=&pid=ImgRaw&r=0"
+                  src={previewNewImage}
                   alt=""
                   srcset=""
                 />

@@ -25,3 +25,8 @@ export const createProductApi = (data) => Api.post('/api/product/create', data, 
 export const getProductsApi = () => Api.get('/api/product')
 export const getProductApi = (id) => Api.get(`/api/product/${id}`)
 export const deleteProductApi = (id) => Api.delete(`/api/product/${id}`)
+export const updateProductApi = (id, data) => Api.patch(`/api/product/${id}`, data, {
+    headers: {
+        'Content-Type':'multipart/form-data'
+    }
+})
