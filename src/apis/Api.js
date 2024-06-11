@@ -22,7 +22,11 @@ export const createProductApi = (data) => Api.post('/api/product/create', data, 
         'Content-Type':'multipart/form-data'
     }
 })
-export const getProductsApi = () => Api.get('/api/product')
+export const getProductsApi = (token) => Api.get('/api/product', {
+    headers:{
+        'Authorization': `bearer ${token}`
+    }
+})
 export const getProductApi = (id) => Api.get(`/api/product/${id}`)
 export const deleteProductApi = (id) => Api.delete(`/api/product/${id}`)
 export const updateProductApi = (id, data) => Api.patch(`/api/product/${id}`, data, {

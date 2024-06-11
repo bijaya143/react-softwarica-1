@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
+  const token = localStorage.getItem("token");
   // States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,7 +20,7 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    getProductsApi()
+    getProductsApi(token)
       .then((res) => {
         setProducts(res.data.data);
       })

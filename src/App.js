@@ -8,6 +8,9 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUpdate from './pages/admin/AdminProductUpdate';
+import AdminRoute from './protectedRoutes/AdminRoute';
+import UserRoute from './protectedRoutes/UserRoute';
+import Profile from './pages/profile/Profile';
 
 function App() {
   return (
@@ -18,9 +21,15 @@ function App() {
         <Route path='/' element={<Homepage/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/admin/product/:id' element={<AdminUpdate/>}/>
+
+        <Route element={<UserRoute/>}>
+      <Route path='/profile' element={<Profile/>}/>
+        </Route>
         {/** Admin */}
+        <Route element={<AdminRoute/>}>
+        <Route path='/admin/product/:id' element={<AdminUpdate/>}/>
         <Route path='/admin/dashboard' element={<AdminDashboard/>} />
+        </Route>
       </Routes>
     </Router>
   );

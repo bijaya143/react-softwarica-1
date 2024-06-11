@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  };
   return (
     <>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -77,7 +81,11 @@ const Navbar = () => {
                         </a>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="#">
+                        <a
+                          onClick={handleLogout}
+                          class="dropdown-item"
+                          href="#"
+                        >
                           Logout
                         </a>
                       </li>
